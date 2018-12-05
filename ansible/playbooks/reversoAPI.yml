@@ -1,0 +1,5 @@
+---
+- name: Executando as roles reversoAPI
+  hosts: reverso_interno
+  roles:
+    - reversoAPI

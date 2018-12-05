@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+#Elliann Marks
+#elian.markes@gmail.com
+#
+
+PORT=$(cat /var/lib/bindrest/port)
+typeset -i PORT
+/usr/bin/gunicorn bindrest.api:app -b :$PORT "$@"

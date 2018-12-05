@@ -1,0 +1,10 @@
+---
+# tasks file for rndcDNS
+- name: rndc commands
+  command: /usr/sbin/rndc {{ item }} tjmt.jus.br in {{ viewDNS }}
+  with_items:
+    - freeze
+    - reload
+    - thaw
+  notify:
+    - rundns

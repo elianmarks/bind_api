@@ -1,0 +1,5 @@
+---
+# defaults file for reversoAPI
+config_file_externo: /usr/local/nginx/conf/includes/externo/externo.conf
+config_file_interno: /usr/local/nginx/conf/includes/interno/interno.conf
+config_directory: /usr/local/nginx/conf/includes

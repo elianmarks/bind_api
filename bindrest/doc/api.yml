@@ -1,0 +1,150 @@
+apis:
+#Elliann Marks
+#elian.markes@gmail.com
+#
+# -----------------------------------------------------------------------------
+# Create DNS
+# -----------------------------------------------------------------------------#
+    - title: Create DNS
+      auth: true
+      url: dnscreate
+      category: DNS
+      method: POST
+      params:
+        - name: nameDomain
+          type: string
+          required: true
+          example: example
+          desc: Name domain
+       
+        - name: confReversoHost
+          type: string
+          required: true
+          example: 1.1.2.2:8080,3.3.4.4:8081
+          desc: Destination host in reverso
+
+      example: |
+
+        curl -X POST https://admin:secret123@dns-api.tjmt.jus.br/dnscreate -d \
+        "nameDomain=example&confReversoHost=1.1.2.2:8080,3.3.4.4:8081"
+
+        curl -X POST https://admin:secret123@dns-api.tjmt.jus.br/dnscreate -d \
+        "nameDomain=example&confReversoHost=1.1.2.2:8080,3.3.4.4:8081&externo=true"
+
+      response: |
+
+        Success example:
+        {
+            "data": "dnscreate - DNS/reverse example create | User-admin",
+            "ok": true
+        }
+
+        Failure example:
+
+        {
+            "data": "dnscreate - DNS interno example fail in create | User-admin",
+            "ok": false
+        }
+
+# -----------------------------------------------------------------------------
+# Delete DNS
+# -----------------------------------------------------------------------------
+    - title: Delete DNS
+      auth: true
+      url: dnsdelete
+      category: DNS
+      method: POST
+      params:
+        - name: nameDomain
+          type: string
+          required: true
+          example: example
+          desc: Name domain
+          
+      example: |
+        
+        curl -X POST https://admin:secret123@dns-api.tjmt.jus.br/dnsdelete -d \
+        "nameDomain=example"
+
+      response: |
+        
+        Success example:
+        {
+          "data": "dnsdelete - DNS elian delete | User-admin",
+          "ok": true
+        }
+
+        Failure example:
+        {
+          "data": "dnsdelete - DNS interno example fail in delete | User-admin",
+          "ok": false
+        }
+
+# -----------------------------------------------------------------------------
+# POST DNS info
+# -----------------------------------------------------------------------------#
+    - title: POST DNS info
+      auth: true
+      url: dnsinfo
+      category: DNS
+      method: POST
+      params:
+        - name: nameDomain
+          type: string
+          required: true
+          example: example
+          desc: Name domain
+
+      example: |
+
+        curl -X POST https://admin:secret123@dns-api.tjmt.jus.br/dnsinfo -d \
+        "nameDomain=example"
+
+      response: |
+        
+        Success example external:
+        {
+          "available": "public",
+          "data": "[1.1.1.1:8081,2.2.2.2:8082]",
+          "ok": true
+        }
+
+        Success example internal:
+        {
+          "available": "internal",
+          "data": "[1.1.1.1:8081,2.2.2.2:8082]",
+          "ok": true
+        }
+
+        Failure example:
+        {
+          "data": "dnsinfo - DNS example not exist | User-admin",
+          "ok": false
+        }
+
+# -----------------------------------------------------------------------------
+# Reload reverse
+# -----------------------------------------------------------------------------#
+    - title: Reload reverse
+      auth: true
+      url: reversereload
+      category: DNS
+      method: GET
+
+      example: |
+
+        curl -X GET https://admin:secret123@dns-api.tjmt.jus.br/reversereload
+
+      response: |
+
+        Success example:
+        {
+          "data": "reversereload | User-admin",
+          "ok": true
+        }
+
+        Failure example:
+        {
+          "data": "reversereload | User-admin",
+          "ok": false
+        }

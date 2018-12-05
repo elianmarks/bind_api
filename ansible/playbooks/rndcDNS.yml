@@ -1,0 +1,5 @@
+---
+- name: Executando as roles rndcDNS
+  hosts: "{{ serverDNS }}"
+  roles:
+    - rndcDNS

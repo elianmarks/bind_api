@@ -1,0 +1,32 @@
+#API DNS
+upstream {{ backend_name }}.tjmt.jus.br {
+    {% for backend in backends %}
+    server {{ backend }};
+    {% endfor %}
+    sticky;
+}
+
+#server {
+#    listen 80;
+#    server_name {{ backend_name }}.tjmt.jus.br;
+#    return 301 https://{{ backend_name }}.tjmt.jus.br$request_uri;
+#}
+
+server {
+    server_name {{ backend_name }}.tjmt.jus.br;
+    listen 80;
+    listen 443 ssl;
+    ssl on;
+    ssl_certificate /usr/local/nginx/conf/ssl/commercial.crt;
+    ssl_certificate_key /usr/local/nginx/conf/ssl/commercial.key;
+    access_log /dados/nginx/logs/{{ reverse_environment }}/{{ backend_name }}.tjmt.jus.br monitoramento;
+    access_log /dados/nginx/logs/{{ reverse_environment }}/access.log;
+
+    location / {
+        proxy_pass http://{{ backend_name }}.tjmt.jus.br;
+        client_max_body_size 20M;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $http_host;
+    }
+}

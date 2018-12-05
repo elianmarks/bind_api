@@ -1,0 +1,4 @@
+---
+# handlers file for rndcDNS
+- name: rundns
+  command: /usr/bin/rundns

@@ -1,0 +1,82 @@
+---
+#Elliann Marks
+#elian.markes@gmail.com
+
+- name: Deploy configuration externo in reverse proxy nothing ssl
+  ignore_errors: yes
+  template:
+    src: proxy.j2
+    dest: "{{ config_directory }}/{{ reverse_environment }}/{{ reverse_environment }}_includes/{{ backend_name }}.conf"
+  when:
+    - remove_backend == False
+    - with_ssl == False
+    - reverse_environment == "externo"
+  notify:
+    - Deploy in externo.conf
+
+- name: Deploy configuration externo in reverse proxy with ssl
+  ignore_errors: yes
+  template:
+    src: proxy_ssl.j2
+    dest: "{{ config_directory }}/{{ reverse_environment }}/{{ reverse_environment }}_includes/{{ backend_name }}.conf"
+  when:
+    - remove_backend == False
+    - with_ssl == True
+    - reverse_environment == "externo"
+  notify:
+    - Deploy in externo.conf
+
+- name: Deploy configuration interno in reverse proxy nothing ssl
+  ignore_errors: yes
+  template:
+    src: proxy.j2
+    dest: "{{ config_directory }}/{{ reverse_environment }}/{{ reverse_environment }}_includes/{{ backend_name }}.conf"
+  when:
+    - remove_backend == False
+    - with_ssl == False
+    - reverse_environment == "interno"
+  notify:
+    - Deploy in interno.conf
+
+- name: Deploy configuration interno in reverse proxy with ssl
+  ignore_errors: yes
+  template:
+    src: proxy_ssl.j2
+    dest: "{{ config_directory }}/{{ reverse_environment }}/{{ reverse_environment }}_includes/{{ backend_name }}.conf"
+  when:
+    - remove_backend == False
+    - with_ssl == True
+    - reverse_environment == "interno"
+  notify:
+    - Deploy in interno.conf
+
+- name: Remove configuration externo in reverse proxy
+  ignore_errors: yes
+  file:
+    path: "{{ config_directory }}/{{ reverse_environment }}/{{ reverse_environment }}_includes/{{ backend_name }}.conf"
+    state: absent
+  when:
+    - remove_backend == True
+    - reverse_environment == "externo"
+  notify:
+    - Remove in externo.conf
+
+- name: Remove configuration interno in reverse proxy
+  ignore_errors: yes
+  file:
+    path: "{{ config_directory }}/{{ reverse_environment }}/{{ reverse_environment }}_includes/{{ backend_name }}.conf"
+    state: absent
+  when:
+    - remove_backend == True
+    - reverse_environment == "interno"
+  notify:
+    - Remove in interno.conf
+
+- name: Apply confs
+  command: /bin/true
+  ignore_errors: yes
+  notify:
+    - Reload interno
+    - Reload externo
+  when:
+    - reload_reverse == True

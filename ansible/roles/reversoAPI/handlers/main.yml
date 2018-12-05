@@ -1,0 +1,77 @@
+---
+# handlers file for reversoAPI
+- name: Reload interno
+  command: /usr/bin/reloadInterno
+
+- name: Reload externo
+  command: /usr/bin/reloadExterno
+
+- name: Git add interno
+  command: git add .
+  args:
+    chdir: /usr/local/nginx/conf/includes/interno
+
+- name: Git commit interno
+  command: git commit -a -m "`date`"
+  args:
+    chdir: /usr/local/nginx/conf/includes/interno
+
+- name: Git push interno
+  command: git push -u origin master
+  args:
+    chdir: /usr/local/nginx/conf/includes/interno
+
+- name: Git add externo
+  command: git add .
+  args:
+    chdir: /usr/local/nginx/conf/includes/externo
+
+- name: Git commit externo
+  command: git commit -a -m "`date`"
+  args:
+    chdir: /usr/local/nginx/conf/includes/externo
+
+- name: Git push externo
+  command: git push -u origin master
+  args:
+    chdir: /usr/local/nginx/conf/includes/externo
+
+- name: Deploy in interno.conf
+  lineinfile:
+    path: "{{ config_file_interno }}"
+    line: "include {{ config_directory }}/{{ reverse_environment }}/{{ reverse_environment }}_includes/{{ backend_name }}.conf;"
+    state: present
+  notify:
+    - Git add interno
+    - Git commit interno
+    - Git push interno
+
+- name: Deploy in externo.conf
+  lineinfile:
+    path: "{{ config_file_externo }}"
+    line: "include {{ config_directory }}/{{ reverse_environment }}/{{ reverse_environment }}_includes/{{ backend_name }}.conf;"
+    state: present
+  notify:
+    - Git add externo
+    - Git commit externo
+    - Git push externo
+
+- name: Remove in interno.conf
+  lineinfile:
+    path: "{{ config_file_interno }}"
+    line: "include {{ config_directory }}/{{ reverse_environment }}/{{ reverse_environment }}_includes/{{ backend_name }}.conf;"
+    state: absent
+  notify:
+    - Git add interno
+    - Git commit interno
+    - Git push interno
+
+- name: Remove in externo.conf
+  lineinfile:
+    path: "{{ config_file_externo }}"
+    line: "include {{ config_directory }}/{{ reverse_environment }}/{{ reverse_environment }}_includes/{{ backend_name }}.conf;"
+    state: absent
+  notify:
+    - Git add externo
+    - Git commit externo
+    - Git push externo
