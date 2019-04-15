@@ -55,7 +55,7 @@ By default it runs in port 9000, to change
 
 ## API documentation
 
-Quick summary of APIs available, for detailed documentation run `sudo bindrestd` and visit [https://dns-api.tjmt.jus.br/doc](https://dns-api.tjmt.jus.br/doc)
+Quick summary of APIs available, for detailed documentation run `sudo bindrestd` and visit [https://dns-api.example.com.br/doc](https://dns-api.tjmt.jus.br/doc)
 
     Get a DNS Info          POST     /dnsinfo
     Create a DNS            POST    /dnscreate
